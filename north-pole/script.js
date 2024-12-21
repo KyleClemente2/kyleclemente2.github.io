@@ -40,17 +40,12 @@ window.addEventListener('DOMContentLoaded', adjustDimensions);
 window.addEventListener('load', adjustDimensions);
 
 const rootDiv = document.getElementById('root');
-rootDiv.addEventListener('click', function(e) {
-    if (e.target === this) {
-        adjustDimensions();
-        alert('1');
-        const gift = new GiftBox(100);
-    }
-});
 
 document.addEventListener('click', function(e) {
-    alert('clicked: ' + e.target);
-    rootDiv.innerText = e.target;
+    const p = document.createElement('p');
+    p.textContent = e.target;
+    rootDiv.appendChild(p);
+    console.log(e.target);
 });
 
 
