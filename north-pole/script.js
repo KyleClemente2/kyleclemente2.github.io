@@ -48,6 +48,10 @@ rootDiv.addEventListener('click', function(e) {
     }
 });
 
+document.addEventListener('click', function(e) {
+    alert('clicked: ' + e.target);
+});
+
 
 const imagesPath = 'assets/images/';
 const sceneWidth = 1408;
