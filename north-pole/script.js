@@ -50,6 +50,7 @@ rootDiv.addEventListener('click', function(e) {
 
 document.addEventListener('click', function(e) {
     alert('clicked: ' + e.target);
+    rootDiv.innerText = e.target;
 });
 
 
