@@ -32,6 +32,7 @@ function adjustDimensions() {
 window.addEventListener('resize', adjustDimensions);
 window.addEventListener('DOMContentLoaded', adjustDimensions);
 window.addEventListener('load', adjustDimensions);
+window.addEventListener('scroll', adjustDimensions);
 
 
 const imagesPath = 'assets/images/';
