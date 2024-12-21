@@ -32,19 +32,26 @@ function adjustDimensions() {
 function test() {
     adjustDimensions();
     const gift = new GiftBox(100);
+    alert('1');
 }
 
 window.addEventListener('resize', adjustDimensions);
 window.addEventListener('DOMContentLoaded', adjustDimensions);
 window.addEventListener('load', adjustDimensions);
-window.addEventListener('scroll', test);
+
+const rootDiv = document.getElementById('root');
+rootDiv.addEventListener('click', function(e) {
+    if (e.target === this) {
+        adjustDimensions();
+    }
+});
 
 
 const imagesPath = 'assets/images/';
 const sceneWidth = 1408;
 const sceneHeight = 704;
 
-const rootDiv = document.getElementById('root');
+
 const sceneContainerDiv = document.getElementById('scene-container');
 
 const toyFactoryImg = document.createElement('img');
