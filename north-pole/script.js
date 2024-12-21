@@ -29,17 +29,13 @@ function adjustDimensions() {
     sceneContainerDiv.style.height = `${newHeight}px`;
 }
 
-function test() {
-    adjustDimensions();
-    const gift = new GiftBox(100);
-    alert('1');
-}
-
 window.addEventListener('resize', adjustDimensions);
 window.addEventListener('DOMContentLoaded', adjustDimensions);
 window.addEventListener('load', adjustDimensions);
 
 const rootDiv = document.getElementById('root');
+
+rootDiv.addEventListener('click', adjustDimensions);
 
 document.addEventListener('click', function(e) {
     const p = document.createElement('p');
