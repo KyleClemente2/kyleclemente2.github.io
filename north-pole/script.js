@@ -29,10 +29,15 @@ function adjustDimensions() {
     sceneContainerDiv.style.height = `${newHeight}px`;
 }
 
+function test() {
+    adjustDimensions();
+    const gift = new GiftBox(100);
+}
+
 window.addEventListener('resize', adjustDimensions);
 window.addEventListener('DOMContentLoaded', adjustDimensions);
 window.addEventListener('load', adjustDimensions);
-window.addEventListener('scroll', adjustDimensions);
+window.addEventListener('scroll', test);
 
 
 const imagesPath = 'assets/images/';
