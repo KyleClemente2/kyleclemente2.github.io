@@ -43,6 +43,8 @@ const rootDiv = document.getElementById('root');
 rootDiv.addEventListener('click', function(e) {
     if (e.target === this) {
         adjustDimensions();
+        alert('1');
+        const gift = new GiftBox(100);
     }
 });
 
