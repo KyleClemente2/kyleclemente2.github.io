@@ -220,7 +220,7 @@ class Carrot {
         this.updateDimensions();
         this.updatePosition(mouseX, mouseY);
         
-        this.img.addEventListener('mousedown', this.followMouse.bind(this));
+        this.img.addEventListener('touchstart', this.followMouse.bind(this));
         
         sceneContainerDiv.appendChild(this.img);
     }
@@ -267,10 +267,10 @@ function carrotFollowOnMouseMove(carrot) {
     
     function onMouseUp() {
         document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp)
+        document.removeEventListener('touchend', onMouseUp)
     }
     
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('touchend', onMouseUp);
 }
 
 function updateCarrotFollowingPosition(event, carrot) {
