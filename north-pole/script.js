@@ -263,6 +263,7 @@ displayText(isTouchDevice);
 
 if (isTouchDevice) {
     carrotTroughImg.addEventListener('touchstart', function(event) {
+        displayText('start');
         displayText(event.clientX);
         displayText(event.clientY);
         event.preventDefault();
@@ -290,6 +291,8 @@ if (isTouchDevice) {
     }
 } else {
     carrotTroughImg.addEventListener('mousedown', function(event) {
+        displayText(event.clientX);
+        displayText(event.clientY);
         event.preventDefault();
         const newCarrot = new Carrot(event.clientX, event.clientY)
         carrots.push(newCarrot);
