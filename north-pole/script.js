@@ -268,29 +268,13 @@ if (isTouchDevice) {
         displayText(event.pageX);
         displayText(event.pageY);
         event.preventDefault();
-        const newCarrot = new Carrot(event.pageX, event.pageY)
+        touch = event.touches[0];
+        const newCarrot = new Carrot(touch.pageX, touch.pageY)
         carrots.push(newCarrot);
     
         carrotFollowOnMouseMove(newCarrot);
     });
     
-    function carrotFollowOnMouseMove(carrot) {
-        function onTouchMove(event) {
-            displayText('3');
-            event.preventDefault();
-            //touch = event.touches[0];
-            updateCarrotFollowingPosition(event, carrot);
-        }
-    
-        document.addEventListener('touchmove', onTouchMove, { passive: false });
-    
-        function onTouchEnd() {
-            document.removeEventListener('touchmove', onTouchMove);
-            document.removeEventListener('touchend', onTouchEnd)
-        }
-    
-        document.addEventListener('touchend', onTouchEnd);
-    }
 } else {
     carrotTroughImg.addEventListener('mousedown', function(event) {
         displayText(event.clientX);
@@ -301,8 +285,26 @@ if (isTouchDevice) {
     
         carrotFollowOnMouseMove(newCarrot);
     });
+}
+
+function carrotFollowOnMouseMove(carrot) {
+    if (isTouchDevice) {
+        function onTouchMove(event) {
+            displayText('3');
+            event.preventDefault();
+            touch = event.touches[0];
+            updateCarrotFollowingPosition(touch, carrot);
+        }
     
-    function carrotFollowOnMouseMove(carrot) {
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+    
+        function onTouchEnd() {
+            document.removeEventListener('touchmove', onTouchMove);
+            document.removeEventListener('touchend', onTouchEnd)
+        }
+    
+        document.addEventListener('touchend', onTouchEnd);
+    } else {
         function onMouseMove(event) {
             updateCarrotFollowingPosition(event, carrot);
         }
