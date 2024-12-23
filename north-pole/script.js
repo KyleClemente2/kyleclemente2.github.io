@@ -250,6 +250,7 @@ class Carrot {
 
 
 const isTouchDevice = 'ontouchstart' in window;
+console.log(isTouchDevice);
 
 if (isTouchDevice) {
     carrotTroughImg.addEventListener('touchstart', function(event) {
