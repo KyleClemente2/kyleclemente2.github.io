@@ -23,6 +23,8 @@ html, body {
     position: absolute;
     font-size: 12px;
     color: #ffc0cb;
+    left: 10px;
+    top: 10px;
 }
 
 img {
