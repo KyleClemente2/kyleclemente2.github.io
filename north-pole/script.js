@@ -1,5 +1,7 @@
 'use strict';
 
+document.
+
 const sceneContainer = document.getElementById('scene-container');
 const textElement = document.createElement('div');
 textElement.classList.add('text');
@@ -275,6 +277,7 @@ if (isTouchDevice) {
     
     function carrotFollowOnMouseMove(carrot) {
         function onTouchMove(event) {
+            displayText('2');
             event.preventDefault();
             touch = event.touches[0];
             updateCarrotFollowingPosition(touch, carrot);
