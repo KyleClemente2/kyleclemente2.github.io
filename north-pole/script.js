@@ -263,7 +263,7 @@ displayText(isTouchDevice);
 
 if (isTouchDevice) {
     carrotTroughImg.addEventListener('touchstart', function(event) {
-        displayText('start');
+        displayText('1');
         displayText(event.pageX);
         displayText(event.pageY);
         event.preventDefault();
