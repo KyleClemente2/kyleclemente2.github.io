@@ -1,5 +1,7 @@
 'use strict';
 
+const isTouchDevice = 'ontouchstart' in window;
+
 const sceneContainer = document.getElementById('scene-container');
 const textElement = document.createElement('div');
 textElement.classList.add('text');
@@ -228,7 +230,11 @@ class Carrot {
         this.updateDimensions();
         this.updatePosition(mouseX, mouseY);
         
-        this.img.addEventListener('touchstart', this.followMouse.bind(this));
+        if (isTouchDevice) {
+            this.img.addEventListener('touchstart', this.followMouse.bind(this));
+        } else {
+            this.img.addEventListener('mousedown', this.followMouse.bind(this));
+        }
         
         sceneContainerDiv.appendChild(this.img);
     }
@@ -258,7 +264,6 @@ class Carrot {
 }
 
 
-const isTouchDevice = 'ontouchstart' in window;
 displayText(isTouchDevice);
 console.log('1');
 
@@ -288,6 +293,7 @@ if (isTouchDevice) {
 }
 
 function carrotFollowOnMouseMove(carrot) {
+    console.log('carrotFollow');
     if (isTouchDevice) {
         function onTouchMove(event) {
             displayText('3');
@@ -306,6 +312,7 @@ function carrotFollowOnMouseMove(carrot) {
         document.addEventListener('touchend', onTouchEnd);
     } else {
         function onMouseMove(event) {
+            console.log('moved');
             updateCarrotFollowingPosition(event, carrot);
         }
     
