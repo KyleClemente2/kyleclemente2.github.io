@@ -260,10 +260,11 @@ class Carrot {
 
 const isTouchDevice = 'ontouchstart' in window;
 displayText(isTouchDevice);
+console.log('1');
 
 if (isTouchDevice) {
     carrotTroughImg.addEventListener('touchstart', function(event) {
-        displayText('1');
+        displayText('3');
         displayText(event.pageX);
         displayText(event.pageY);
         event.preventDefault();
@@ -275,7 +276,7 @@ if (isTouchDevice) {
     
     function carrotFollowOnMouseMove(carrot) {
         function onTouchMove(event) {
-            displayText('2');
+            displayText('3');
             event.preventDefault();
             //touch = event.touches[0];
             updateCarrotFollowingPosition(event, carrot);
