@@ -318,7 +318,12 @@ if (isTouchDevice) {
 }
 
 function updateCarrotFollowingPosition(event, carrot) {
-    carrot.updatePosition(event.clientX, event.clientY);
+    if (isTouchDevice) {
+        carrot.updatePosition(event.pageX, event.pageY);
+    } else {
+        carrot.updatePosition(event.clientX, event.clientY);
+    }
+    
 }
 
 function gameLoop() {
