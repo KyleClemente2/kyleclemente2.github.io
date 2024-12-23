@@ -1,5 +1,6 @@
 'use strict';
 import reindeerStable from './reindeer-stable.js';
+console.log('2');
 
 const isTouchDevice = 'ontouchstart' in window;
 
