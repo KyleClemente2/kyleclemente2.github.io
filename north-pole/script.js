@@ -263,8 +263,8 @@ displayText(isTouchDevice);
 
 if (isTouchDevice) {
     carrotTroughImg.addEventListener('touchstart', function(event) {
-        console.log(event.clientX, event.clientY);
-        console.log(event);
+        displayText(event.clientX);
+        displayText(event.clientY);
         event.preventDefault();
         const newCarrot = new Carrot(event.clientX, event.clientY)
         carrots.push(newCarrot);
