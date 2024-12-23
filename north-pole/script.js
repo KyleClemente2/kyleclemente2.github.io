@@ -1,5 +1,6 @@
 'use strict';
 
+console.log('1');
 const isTouchDevice = 'ontouchstart' in window;
 
 function preventDefault(e) {
