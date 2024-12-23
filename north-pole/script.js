@@ -264,14 +264,9 @@ class Carrot {
 }
 
 
-displayText(isTouchDevice);
-console.log('1');
 
 if (isTouchDevice) {
     carrotTroughImg.addEventListener('touchstart', function(event) {
-        displayText('3');
-        displayText(event.pageX);
-        displayText(event.pageY);
         event.preventDefault();
         const touch = event.touches[0];
         const newCarrot = new Carrot(touch.pageX, touch.pageY)
@@ -282,8 +277,6 @@ if (isTouchDevice) {
     
 } else {
     carrotTroughImg.addEventListener('mousedown', function(event) {
-        displayText(event.clientX);
-        displayText(event.clientY);
         event.preventDefault();
         const newCarrot = new Carrot(event.clientX, event.clientY)
         carrots.push(newCarrot);
@@ -293,10 +286,8 @@ if (isTouchDevice) {
 }
 
 function carrotFollowOnMouseMove(carrot) {
-    console.log('carrotFollow');
     if (isTouchDevice) {
         function onTouchMove(event) {
-            displayText('3');
             event.preventDefault();
             const touch = event.touches[0];
             updateCarrotFollowingPosition(touch, carrot);
@@ -312,7 +303,6 @@ function carrotFollowOnMouseMove(carrot) {
         document.addEventListener('touchend', onTouchEnd);
     } else {
         function onMouseMove(event) {
-            console.log('moved');
             updateCarrotFollowingPosition(event, carrot);
         }
     
