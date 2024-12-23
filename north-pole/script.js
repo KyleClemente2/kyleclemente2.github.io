@@ -5,13 +5,14 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+let newWidth, newHeight;
+
 function adjustDimensions() {
     const sceneContainerDiv = document.getElementById('scene-container');
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const aspectRatio = 2 / 1;
     
-    let newWidth, newHeight;
     if (viewportHeight * aspectRatio < viewportWidth) {
         newWidth = viewportHeight * aspectRatio;
         newHeight = viewportHeight;
@@ -19,11 +20,6 @@ function adjustDimensions() {
         newHeight = viewportWidth / aspectRatio;
         newWidth = viewportWidth;
     }
-    
-    /*console.log('viewport width: ' + String(viewportWidth));
-    console.log('viewport height: ' + String(viewportHeight));
-    console.log('new width: ' + String(newWidth));
-    console.log('new height: ' + String(newHeight));*/
     
     sceneContainerDiv.style.width = `${newWidth}px`;
     sceneContainerDiv.style.height = `${newHeight}px`;
@@ -35,13 +31,10 @@ window.addEventListener('load', adjustDimensions);
 
 const rootDiv = document.getElementById('root');
 
-rootDiv.addEventListener('click', adjustDimensions);
-
-document.addEventListener('click', function(e) {
-    const p = document.createElement('p');
-    p.textContent = e.target;
-    rootDiv.appendChild(p);
-    console.log(e.target);
+rootDiv.addEventListener('click', function(e) {
+    if (e.target === this) {
+        adjustDimensions();
+    }
 });
 
 
@@ -49,173 +42,246 @@ const imagesPath = 'assets/images/';
 const sceneWidth = 1408;
 const sceneHeight = 704;
 
-
 const sceneContainerDiv = document.getElementById('scene-container');
 
-const toyFactoryImg = document.createElement('img');
-toyFactoryImg.src = imagesPath + 'toy-factory.jpg';
-toyFactoryImg.classList.add('scene-img');
 
-sceneContainerDiv.appendChild(toyFactoryImg);
+const reindeerStableImg = document.createElement('img');
+reindeerStableImg.setAttribute('draggable', false);
+reindeerStableImg.src = imagesPath + 'reindeer-stable.jpg';
+reindeerStableImg.classList.add('scene-img');
 
-const conveyorBeltUpdateInterval = 50;
-const conveyorBeltSpeed = 2;
-
-const beltSegmentY = 620;
-const beltSegmentWidth = 164;
-const beltSegmentStartX = -80;
-const beltSegmentXInterval = 160;
+sceneContainerDiv.appendChild(reindeerStableImg);
 
 
-class BeltSegment {
-    constructor(x) {
-        this.x = x;
+const sleighRailSegmentX = 60;
+const sleighRailSegmentY = 378;
+const sleighRailSegmentWidth = 28;
+const sleighRailSegmentImg = document.createElement('img');
+sleighRailSegmentImg.setAttribute('draggable', false);
+sleighRailSegmentImg.src = imagesPath + 'sleigh-rail-segment.png';
+sleighRailSegmentImg.classList.add('sleigh-rail-segment', 'element');
+
+
+sleighRailSegmentImg.style.width = (sleighRailSegmentWidth / sceneWidth) * 100 + '%';
+sleighRailSegmentImg.style.top = (sleighRailSegmentY / sceneHeight) * 100 + '%';
+sleighRailSegmentImg.style.left = (sleighRailSegmentX / sceneWidth) * 100 + '%';
+
+sceneContainerDiv.appendChild(sleighRailSegmentImg);
+
+
+const carrotTroughX = 700;
+const carrotTroughY = 570;
+const carrotTroughWidth = 200;
+const carrotTroughImg = document.createElement('img');
+carrotTroughImg.setAttribute('draggable', false);
+carrotTroughImg.src = imagesPath + 'carrot-trough.png';
+carrotTroughImg.classList.add('carrot-trough', 'element');
+
+carrotTroughImg.style.width = (carrotTroughWidth / sceneWidth) * 100 + '%';
+carrotTroughImg.style.top = (carrotTroughY / sceneHeight) * 100 + '%';
+carrotTroughImg.style.left = (carrotTroughX / sceneWidth) * 100 + '%';
+
+sceneContainerDiv.appendChild(carrotTroughImg);
+
+
+const reindeersCenterCoords = [[100, 100], [1200, 100], [1200, 500]];
+const reindeerBaseWidth = 80; // width when reindeer centerY = 0
+const reindeerMaxWidth = 160; // width when reindeer centerY = sceneHeight
+const reindeerImgWidth = 200;
+const reindeerImgHeight = 282;
+
+const reindeerSpeed = 2;
+
+const reindeers = [];
+const carrots = [];
+const carrotSearchDistance = (reindeerImgWidth / 2) + 150;
+const carrotMinDistance = (reindeerImgWidth / 2) + 10;
+
+class Reindeer {
+    constructor(x, y) {
+        this.centerX = x;
+        this.centerY = y;
+        this.directionFacing = 'front-right';
+        this.carrotFollowing = null;
         
         this.img = document.createElement('img');
-        this.img.src = imagesPath + 'belt-segment.jpg';
-        this.img.classList.add('belt-segment');
+        this.img.setAttribute('draggable', false);
+        this.img.src = imagesPath + 'reindeer-' + this.directionFacing + '.png';
+        this.img.classList.add('reindeer', 'element');
         
-        this.img.style.width = (beltSegmentWidth / sceneWidth) * 100 + '%';
-        this.img.style.top = (beltSegmentY / sceneHeight) * 100 + '%';
-        this.img.style.left = (this.x / sceneWidth) * 100 + '%';
-        this.img.style.zIndex = '2';
+        this.updateDimensions();
+        
+        this.updatePosition();
         
         sceneContainerDiv.appendChild(this.img);
-        
     }
     
-    move() {
-        this.x += conveyorBeltSpeed;
+    calculateCenter() {
+        return;
+    }
+    
+    updateDimensions() {
+        const widthIncrement = (reindeerMaxWidth - reindeerBaseWidth) / sceneHeight;
+        this.width = reindeerBaseWidth + (this.centerY * widthIncrement);
+        this.height = (reindeerImgHeight / reindeerImgWidth) * this.width;
+        
+        this.img.style.width = (this.width / sceneWidth) * 100 + '%';
+    }
+    
+    updateDirectionFacing(moveX, moveY) {
+        const oldDirectionFacing = this.directionFacing;
+        if (moveX <= 0 && moveY < 0) {
+            this.directionFacing = 'back-left';
+        } else if (moveX > 0 && moveY < 0) {
+            this.directionFacing = 'back-right';
+        } else if (moveX <= 0 && moveY >= 0) {
+            this.directionFacing = 'front-left';
+        } else if (moveX > 0 && moveY >=0) {
+            this.directionFacing = 'front-right';
+        }
+        if (this.directionFacing !== oldDirectionFacing) {
+            this.img.src = imagesPath + 'reindeer-' + this.directionFacing + '.png';
+        }
+    }
+    
+    updatePosition() {
+        this.x = this.centerX - (this.width / 2);
+        this.y = this.centerY - (this.height / 2);
         this.img.style.left = (this.x / sceneWidth) * 100 + '%';
+        this.img.style.top = (this.y / sceneHeight) * 100 + '%';
+        this.updateDimensions();
     }
     
-}
-
-let beltSegments = [];
-let beltSegmentX = beltSegmentStartX;
-while (beltSegmentX < sceneWidth) {
-    beltSegments.push(new BeltSegment(beltSegmentX));
-    beltSegmentX += beltSegmentXInterval;
-}
-
-/*function updateConveyerBelt() {
-    //console.log(beltSegments.length)
-    if (beltSegments[0].x + conveyorBeltSpeed >= 0) {
-        beltSegments.unshift(new BeltSegment(beltSegments[0].x - beltSegmentXInterval));
+    isNearCarrot(carrot) {
+        const distanceX = carrot.centerX - this.centerX;
+        const distanceY = carrot.centerY - this.centerY;
+        const distance = Math.sqrt((distanceX ** 2) + (distanceY ** 2));
+        return distance <= carrotSearchDistance;
     }
     
-    beltSegments.forEach(beltSegment => {
-        beltSegment.move();
-    });
-    
-    const lastBeltSegment = beltSegments[beltSegments.length - 1]
-    //console.log('last x ' + lastBeltSegment.x);
-    //console.log('scene ' + sceneWidth);
-    if (lastBeltSegment.x > sceneWidth) {
-        //console.log('removing');
-        lastBeltSegment.img.remove();
-        beltSegments.pop();
-    }
-}
-
-setInterval(updateConveyerBelt, conveyorBeltUpdateInterval);*/
-
-
-const giftBoxBottomY = 664;
-
-const giftBoxData = {
-    'gift-box-1': {
-        'width': 54,
-        'imageWidth': 264,
-        'imageHeight': 292,
-        'yVariance': 12
-    }
-}
-for (const giftBoxKey of Object.keys(giftBoxData)) {
-    const giftBox = giftBoxData[giftBoxKey];
-    giftBox['height'] = (giftBox['imageHeight'] / giftBox['imageWidth']) * giftBox['width'];
-}
-
-class GiftBox {
-    constructor(x, type) {
-        this.x = x;
-        this.type = 'gift-box-1';
+    moveToCarrot(carrot) {
+        const distanceX = carrot.centerX - this.centerX;
+        const distanceY = carrot.centerY - this.centerY;
+        const distance = Math.sqrt((distanceX ** 2) + (distanceY ** 2));
         
+        if (distance > carrotMinDistance) {
+            const moveX = (distanceX / distance) * reindeerSpeed;
+            const moveY = (distanceY / distance) * reindeerSpeed;
+            console.log(moveX, moveY);
+            
+            this.centerX += moveX;
+            this.centerY += moveY;
+            
+            this.updateDirectionFacing(moveX, moveY);
+            this.updatePosition();
+        }
+    }
+    
+    checkForCarrots(carrots) {
+        if (this.carrotFollowing !== null) {
+            if (this.isNearCarrot(this.carrotFollowing)) {
+                this.moveToCarrot(this.carrotFollowing);
+            } else {
+                this.carrotFollowing.isFollowed = false;
+                this.carrotFollowing = null;
+            }
+        } else {
+            for (const carrot of carrots) {
+                if (!carrot.isFollowed && this.isNearCarrot(carrot)) {
+                    this.carrotFollowing = carrot;
+                    carrot.isFollowed = true;
+                    this.moveToCarrot(carrot);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+for (const reindeerCenterCoords of reindeersCenterCoords) {
+    reindeers.push(new Reindeer(reindeerCenterCoords[0], reindeerCenterCoords[1]));
+}
+
+
+const carrotImgWidth = 150;
+const carrotImgHeight = 72;
+const carrotWidth = 80;
+const carrotHeight = 80 * (carrotImgHeight / carrotImgWidth);
+
+class Carrot {
+    constructor(mouseX, mouseY) {
+        this.width = 80;
+        this.isFollowed = false;
         this.img = document.createElement('img');
-        this.img.src = imagesPath + this.type + '-unopened.png';
-        this.img.classList.add('gift-box');
+        this.img.setAttribute('draggable', false);
+        this.img.src = imagesPath + 'carrot.png';
+        this.img.classList.add('carrot', 'element');
         
-        this.img.style.width = (giftBoxData[this.type]['width'] / sceneWidth) * 100 + '%';
+        this.updateDimensions();
+        this.updatePosition(mouseX, mouseY);
         
-        const yVariance = getRandomInt(0, giftBoxData[this.type]['yVariance']);
-        const y = giftBoxBottomY - giftBoxData[this.type]['height'] - yVariance;
-        
-        this.img.style.top = (y / sceneHeight) * 100 + '%';
-        this.img.style.left = (this.x / sceneWidth) * 100 + '%';
-        this.img.style.zIndex = '3';
-        
-        this.img.addEventListener('click', this.openGift.bind(this), { once: true });
+        this.img.addEventListener('mousedown', this.followMouse.bind(this));
         
         sceneContainerDiv.appendChild(this.img);
+    }
+    
+    updateDimensions() {
+        const width = (carrotWidth / sceneWidth) * 100 + '%';
+        this.img.style.width = width;
+    }
+    
+    updatePosition(mouseClientX, mouseClientY) {
+        const ratio = sceneWidth / newWidth;
+        const rect = sceneContainerDiv.getBoundingClientRect();
+        this.x = (mouseClientX - rect.left) * ratio;
+        this.y = (mouseClientY - rect.top) * ratio;
         
+        this.centerX = this.x - (carrotWidth / 2);
+        this.centerY = this.y - (carrotHeight / 2);
+        
+        this.img.style.left = (this.centerX / sceneWidth) * 100 + '%';
+        this.img.style.top = (this.centerY / sceneHeight) * 100 + '%';
     }
     
-    move() {
-        this.x += conveyorBeltSpeed;
-        this.img.style.left = (this.x / sceneWidth) * 100 + '%';
+    followMouse() {
+        carrotFollowOnMouseMove(this);
     }
     
-    openGift() {
-        this.img.src = imagesPath + this.type + '-opened.png';
-    }
 }
 
 
-const giftBoxXInterval = 200;
-const giftBoxStartX = -80;
+carrotTroughImg.addEventListener('mousedown', function(event) {
+    const newCarrot = new Carrot(event.clientX, event.clientY)
+    carrots.push(newCarrot);
+    
+    carrotFollowOnMouseMove(newCarrot);
+    
+});
 
-let giftBoxes = [];
-let giftBoxX = giftBoxStartX;
-while (giftBoxX < sceneWidth) {
-    giftBoxes.push(new GiftBox(giftBoxX));
-    giftBoxX += giftBoxXInterval;
+function carrotFollowOnMouseMove(carrot) {
+    function onMouseMove(event) {
+        updateCarrotFollowingPosition(event, carrot);
+    }
+    
+    document.addEventListener('mousemove', onMouseMove);
+    
+    function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp)
+    }
+    
+    document.addEventListener('mouseup', onMouseUp);
 }
 
-function updateConveyerBelt() {
-    //console.log(beltSegments.length)
-    if (beltSegments[0].x + conveyorBeltSpeed >= 0) {
-        beltSegments.unshift(new BeltSegment(beltSegments[0].x - beltSegmentXInterval));
-    }
+function updateCarrotFollowingPosition(event, carrot) {
     
-    beltSegments.forEach(beltSegment => {
-        beltSegment.move();
-    });
-    
-    const lastBeltSegment = beltSegments[beltSegments.length - 1]
-    //console.log('last x ' + lastBeltSegment.x);
-    //console.log('scene ' + sceneWidth);
-    if (lastBeltSegment.x > sceneWidth) {
-        //console.log('removing');
-        lastBeltSegment.img.remove();
-        beltSegments.pop();
-    }
-    
-    if (giftBoxes[0].x + conveyorBeltSpeed >= 0) {
-        giftBoxes.unshift(new GiftBox(giftBoxes[0].x - giftBoxXInterval));
-    }
-    
-    giftBoxes.forEach(giftBox => {
-        giftBox.move();
-    });
-    
-    const lastGiftBox = giftBoxes[giftBoxes.length - 1]
-    //console.log('last x ' + lastBeltSegment.x);
-    //console.log('scene ' + sceneWidth);
-    if (lastGiftBox.x > sceneWidth) {
-        //console.log('removing');
-        lastGiftBox.img.remove();
-        giftBoxes.pop();
-    }
+    carrot.updatePosition(event.clientX, event.clientY);
 }
 
-setInterval(updateConveyerBelt, conveyorBeltUpdateInterval);
+function gameLoop() {
+    for (const reindeer of reindeers) {
+        reindeer.checkForCarrots(carrots);
+    }
+    requestAnimationFrame(gameLoop);
+}
+gameLoop();

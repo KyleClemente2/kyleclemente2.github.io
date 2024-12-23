@@ -20,6 +20,7 @@ html, body {
 
 .scene-img {
     display: block;
+    position: absolute;
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -27,16 +28,30 @@ html, body {
     z-index: 1;
 }
 
-.belt-segment {
+.element {
     position: absolute;
+}
+
+.belt-segment {
+    z-index: 2;
 }
 
 .gift-box {
-    position: absolute;
+    z-index: 3;
 }
 
-p {
-    position: absolute;
-    z-index: 10;
-    font-size: 20px;
+.sleigh-rail-segment {
+    z-index: 100;
+}
+
+.carrot-trough {
+    z-index: 100;
+}
+
+.carrot {
+    z-index: 9999;
+}
+
+.reindeer {
+    z-index: 200;
 }
