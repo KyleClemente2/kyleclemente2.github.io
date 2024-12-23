@@ -2,6 +2,14 @@
 
 const isTouchDevice = 'ontouchstart' in window;
 
+function preventDefault(e) {
+    e.preventDefault();
+}
+
+function disableScroll() {
+    document.body.addEventListener('touchmove', preventDefault, { passive: false })
+}
+
 const sceneContainer = document.getElementById('scene-container');
 const textElement = document.createElement('div');
 textElement.classList.add('text');
