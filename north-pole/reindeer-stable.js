@@ -1,10 +1,10 @@
 'use strict';
 import globals from './globals.js';
 
+const isTouchDevice = 'ontouchstart' in window;
 const sceneWidth = globals.sceneWidth;
 const sceneHeight = globals.sceneHeight;
 const imagesPath = globals.imagesPath;
-
 const sceneContainerDiv = document.getElementById('scene-container');
 
 class Reindeer {
@@ -218,6 +218,7 @@ function addReindeer() {
     for (const reindeerCenterCoords of reindeersCenterCoords) {
         reindeers.push(new Reindeer(reindeerCenterCoords[0], reindeerCenterCoords[1]));
     }
+    console.log(reindeers);
     return reindeers;
 }
 
@@ -262,21 +263,22 @@ function updateCarrotFollowingPosition(event, carrot) {
 }
 
 function checkReindeerForCarrots(reindeers, carrots) {
+    console.log('r');
+    console.log(reindeers);
     for (const reindeer of reindeers) {
         reindeer.checkForCarrots(carrots);
     }
-    requestAnimationFrame(checkReindeerForCarrots);
+    requestAnimationFrame(() => checkReindeerForCarrots(reindeers, carrots));
 }
 
-export function main() {
-    const imagesPath = imagesPath;
-    const sceneWidth = sceneWidth;
-    const sceneHeight = sceneHeight;
-
+function main() {
     addSceneImages();
     const carrots = [];
     addCarrotTrough(carrots);
     const reindeers = addReindeer();
 
+    console.log('checking');
     checkReindeerForCarrots(reindeers, carrots);
 }
+
+export default main;
