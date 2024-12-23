@@ -268,7 +268,7 @@ if (isTouchDevice) {
         displayText(event.pageX);
         displayText(event.pageY);
         event.preventDefault();
-        touch = event.touches[0];
+        const touch = event.touches[0];
         const newCarrot = new Carrot(touch.pageX, touch.pageY)
         carrots.push(newCarrot);
     
@@ -292,7 +292,7 @@ function carrotFollowOnMouseMove(carrot) {
         function onTouchMove(event) {
             displayText('3');
             event.preventDefault();
-            touch = event.touches[0];
+            const touch = event.touches[0];
             updateCarrotFollowingPosition(touch, carrot);
         }
     
