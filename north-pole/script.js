@@ -277,8 +277,8 @@ if (isTouchDevice) {
         function onTouchMove(event) {
             displayText('2');
             event.preventDefault();
-            touch = event.touches[0];
-            updateCarrotFollowingPosition(touch, carrot);
+            //touch = event.touches[0];
+            updateCarrotFollowingPosition(event, carrot);
         }
     
         document.addEventListener('touchmove', onTouchMove, { passive: false });
