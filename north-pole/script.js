@@ -252,7 +252,9 @@ class Carrot {
 const isTouchDevice = 'ontouchstart' in window;
 
 if (isTouchDevice) {
-        carrotTroughImg.addEventListener('touchstart', function(event) {
+    carrotTroughImg.addEventListener('touchstart', function(event) {
+        console.log(event.clientX, event.clientY);
+        console.log(event);
         event.preventDefault();
         const newCarrot = new Carrot(event.clientX, event.clientY)
         carrots.push(newCarrot);
