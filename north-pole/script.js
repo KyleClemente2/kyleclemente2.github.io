@@ -167,7 +167,6 @@ class Reindeer {
         if (distance > carrotMinDistance) {
             const moveX = (distanceX / distance) * reindeerSpeed;
             const moveY = (distanceY / distance) * reindeerSpeed;
-            console.log(moveX, moveY);
             
             this.centerX += moveX;
             this.centerY += moveY;
@@ -250,31 +249,59 @@ class Carrot {
 }
 
 
-carrotTroughImg.addEventListener('touchstart', function(event) {
-    const newCarrot = new Carrot(event.clientX, event.clientY)
-    carrots.push(newCarrot);
-    
-    carrotFollowOnMouseMove(newCarrot);
-    
-});
+const isTouchDevice = 'ontouchstart' in window;
 
-function carrotFollowOnMouseMove(carrot) {
-    function onMouseMove(event) {
-        updateCarrotFollowingPosition(event, carrot);
+if (isTouchDevice) {
+        carrotTroughImg.addEventListener('touchstart', function(event) {
+        event.preventDefault();
+        const newCarrot = new Carrot(event.clientX, event.clientY)
+        carrots.push(newCarrot);
+    
+        carrotFollowOnMouseMove(newCarrot);
+    });
+    
+    function carrotFollowOnMouseMove(carrot) {
+        function onTouchMove(event) {
+            event.preventDefault();
+            touch = event.touches[0];
+            updateCarrotFollowingPosition(touch, carrot);
+        }
+    
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+    
+        function onTouchEnd() {
+            document.removeEventListener('touchmove', onTouchMove);
+            document.removeEventListener('touchend', onTouchEnd)
+        }
+    
+        document.addEventListener('touchend', onTouchEnd);
     }
+} else {
+    carrotTroughImg.addEventListener('mousedown', function(event) {
+        event.preventDefault();
+        const newCarrot = new Carrot(event.clientX, event.clientY)
+        carrots.push(newCarrot);
     
-    document.addEventListener('touchmove', onMouseMove);
+        carrotFollowOnMouseMove(newCarrot);
+    });
     
-    function onMouseUp() {
-        document.removeEventListener('touchmove', onMouseMove);
-        document.removeEventListener('touchend', onMouseUp)
+    function carrotFollowOnMouseMove(carrot) {
+        function onMouseMove(event) {
+            updateCarrotFollowingPosition(event, carrot);
+        }
+    
+        document.addEventListener('mousemove', onMouseMove);
+    
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp)
+        }
+    
+        document.addEventListener('mouseup', onMouseUp);
     }
-    
-    document.addEventListener('touchend', onMouseUp);
 }
 
 function updateCarrotFollowingPosition(event, carrot) {
-    
     carrot.updatePosition(event.clientX, event.clientY);
 }
 
