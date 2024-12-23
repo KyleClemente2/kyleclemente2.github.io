@@ -268,7 +268,7 @@ function checkReindeerForCarrots(reindeers, carrots) {
     requestAnimationFrame(checkReindeerForCarrots);
 }
 
-function main() {
+export function main() {
     const imagesPath = imagesPath;
     const sceneWidth = sceneWidth;
     const sceneHeight = sceneHeight;
@@ -280,5 +280,3 @@ function main() {
 
     checkReindeerForCarrots(reindeers, carrots);
 }
-
-export default main;
