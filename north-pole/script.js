@@ -1,7 +1,5 @@
 'use strict';
 
-document.
-
 const sceneContainer = document.getElementById('scene-container');
 const textElement = document.createElement('div');
 textElement.classList.add('text');
