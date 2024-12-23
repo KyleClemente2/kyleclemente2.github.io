@@ -264,10 +264,10 @@ displayText(isTouchDevice);
 if (isTouchDevice) {
     carrotTroughImg.addEventListener('touchstart', function(event) {
         displayText('start');
-        displayText(event.clientX);
-        displayText(event.clientY);
+        displayText(event.pageX);
+        displayText(event.pageY);
         event.preventDefault();
-        const newCarrot = new Carrot(event.clientX, event.clientY)
+        const newCarrot = new Carrot(event.pageX, event.pageY)
         carrots.push(newCarrot);
     
         carrotFollowOnMouseMove(newCarrot);
