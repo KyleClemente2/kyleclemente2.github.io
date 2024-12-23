@@ -1,6 +1,14 @@
 'use strict';
 
-console.error('running');
+const sceneContainer = document.getElementById('scene-container');
+const textElement = document.createElement('div');
+textElement.classList.add('text');
+sceneContainer.appendChild(textElement);
+function displayText(inputText) {
+    const text = String(inputText);
+    textElement.textContent += text + '  ';
+}
+
 function getRandomInt(min, max) {
     /* inclusive */
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -251,7 +259,7 @@ class Carrot {
 
 
 const isTouchDevice = 'ontouchstart' in window;
-console.log(isTouchDevice);
+displayText(isTouchDevice);
 
 if (isTouchDevice) {
     carrotTroughImg.addEventListener('touchstart', function(event) {
