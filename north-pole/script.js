@@ -250,7 +250,7 @@ class Carrot {
 }
 
 
-carrotTroughImg.addEventListener('mousedown', function(event) {
+carrotTroughImg.addEventListener('touchstart', function(event) {
     const newCarrot = new Carrot(event.clientX, event.clientY)
     carrots.push(newCarrot);
     
@@ -263,10 +263,10 @@ function carrotFollowOnMouseMove(carrot) {
         updateCarrotFollowingPosition(event, carrot);
     }
     
-    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('touchmove', onMouseMove);
     
     function onMouseUp() {
-        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('touchmove', onMouseMove);
         document.removeEventListener('touchend', onMouseUp)
     }
     
