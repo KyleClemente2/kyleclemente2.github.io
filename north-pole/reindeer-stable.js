@@ -1,5 +1,5 @@
 'use strict';
-import globals from './globals';
+import globals from './globals.js';
 
 const sceneWidth = globals.sceneWidth;
 const sceneHeight = globals.sceneHeight;
