@@ -398,6 +398,7 @@ function carrotFollowOnMouseMove(carrot) {
 
 function updateCarrotFollowingPosition(event, carrot) {
     if (isTouchDevice) {
+        console.log(event);
         carrot.updatePosition(event.pageX, event.pageY);
     } else {
         carrot.updatePosition(event.clientX, event.clientY);
