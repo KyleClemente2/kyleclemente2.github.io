@@ -318,7 +318,7 @@ class Elf {
     }
 
     createSpeechBubble() {
-        if (this.speechBubble {
+        if (this.speechBubble) {
             this.speechBubbleText.remove();
             this.speechBubble.remove();
         }
@@ -363,8 +363,10 @@ class Elf {
     }
 
     closeSpeechBubble() {
-        this.speechBubble.removeChild(this.speechBubbleText);
-        sceneContainerDiv.removeChild(this.speechBubble);
+        if (this.speechBubble) {
+            this.speechBubble.removeChild(this.speechBubbleText);
+            sceneContainerDiv.removeChild(this.speechBubble);
+        }
         this.dialogueIndex = 0;
         this.callback();
     }
