@@ -601,7 +601,6 @@ function toyFactoryElf() {
 }
 
 function toyFactoryScene() {
-    console.log('toy factory');
     addToyFactoryScene();
     const conveyorBelt = new ConveyorBelt();
     startConveyorBelt(conveyorBelt);
