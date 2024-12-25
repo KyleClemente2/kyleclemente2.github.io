@@ -18,11 +18,11 @@ const verticalScalingFactor = 2;
 let firstName;
 
 const urls = {
-    'Nina': '',
-    'Steve': '',
-    'Dylan': '',
-    'Amy': '',
-    'Jason': ''
+    'Nina': 'https://kyleclemente2.github.io/north-pole/gifts/nina/index.html',
+    'Steve': 'https://kyleclemente2.github.io/north-pole/gifts/steve/index.html',
+    'Dylan': 'https://kyleclemente2.github.io/north-pole/gifts/dylan/index.html',
+    'Amy': 'https://kyleclemente2.github.io/north-pole/gifts/amy/index.html',
+    'Jason': 'https://kyleclemente2.github.io/north-pole/gifts/jason/index.html'
 };
 
 const touchStartListener = function(event) {
@@ -940,7 +940,7 @@ class GiftPile {
         this.height = 36;
 
         this.link = document.createElement('a');
-        const url = 'https://www.google.com'
+        const url = urls[firstName];
         this.link.href = url;
         this.link.target = '_blank';
         this.link.classList.add('gift-pile', 'element');
@@ -1027,8 +1027,6 @@ function carrotFollowOnMouseMove(carrot) {
     if (isTouchDevice) {
         function onTouchMove(event, carrot) {
             event.preventDefault();
-            //const touch = event.touches[0];
-            //updateCarrotFollowingPosition(touch, carrot);
             updateCarrotFollowingPosition(event, carrot);
         }
     
@@ -1132,8 +1130,8 @@ function reindeerStable() {
 
 function main() {
     windowHandler();
-    //niceList();
+    niceList();
     //villageSceneOne();
-    reindeerStable();
+    //reindeerStable();
 }
 main();
