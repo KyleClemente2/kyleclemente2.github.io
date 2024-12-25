@@ -12,6 +12,7 @@ const isTouchDevice = 'ontouchstart' in window;
 const sceneWidth = globals.sceneWidth;
 const sceneHeight = globals.sceneHeight;
 const imagesPath = globals.imagesPath;
+const audioPath = globals.audioPath;
 const frameRate = globals.frameRate;
 const sceneContainerDiv = document.getElementById('scene-container');
 const verticalScalingFactor = 2;
