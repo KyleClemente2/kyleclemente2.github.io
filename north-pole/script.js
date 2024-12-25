@@ -302,10 +302,11 @@ class Elf {
         this.div.style.left = (this.hitbox['x1'] / sceneWidth) * 100 + '%';
         this.div.style.top = (this.hitbox['y1'] / sceneHeight) * 100 + '%';
 
+        const boundShowDialogue = this.showDialogue.bind(this);
         if (isTouchDevice) {
-            this.div.addEventListener('touchstart', this.showDialogue.bind(this));
+            this.div.addEventListener('touchstart', boundShowDialogue);
         } else {
-            this.div.addEventListener('click', this.showDialogue.bind(this));
+            this.div.addEventListener('click', boundShowDialogue);
         }
         
 
@@ -318,9 +319,10 @@ class Elf {
     }
 
     createSpeechBubble() {
-        if (this.speechBubble) {
-            this.speechBubbleText.remove();
-            this.speechBubble.remove();
+        if (isTouchDevice) {
+            this.div.removeEventListener('touchstart', boundShowDialogue);
+        } else {
+            this.div.removeEventListener('click', boundShowDialogue);
         }
         const speechBubbleWidth = 150;
         const speechBubbleHeight = 160;
@@ -363,12 +365,17 @@ class Elf {
     }
 
     closeSpeechBubble() {
-        if (this.speechBubble) {
-            this.speechBubble.removeChild(this.speechBubbleText);
-            sceneContainerDiv.removeChild(this.speechBubble);
-        }
+        this.speechBubble.removeChild(this.speechBubbleText);
+        sceneContainerDiv.removeChild(this.speechBubble);
         this.dialogueIndex = 0;
         this.callback();
+
+        const boundShowDialogue = this.showDialogue.bind(this);
+        if (isTouchDevice) {
+            this.div.addEventListener('touchstart', boundShowDialogue);
+        } else {
+            this.div.addEventListener('click', boundShowDialogue);
+        }
     }
 }
 
