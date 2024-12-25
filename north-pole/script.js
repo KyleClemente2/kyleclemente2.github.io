@@ -109,7 +109,7 @@ function fadeTransition(sceneFunction, audioFile = undefined) {
         }
         sceneFunction();
 
-        if (audio) {
+        if (audioFile) {
             const audio = new Audio();
             audio.src = audioPath + audioFile;
             audio.play();
