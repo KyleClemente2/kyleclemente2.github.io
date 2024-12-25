@@ -318,6 +318,10 @@ class Elf {
     }
 
     createSpeechBubble() {
+        if (this.speechBubble {
+            this.speechBubbleText.remove();
+            this.speechBubble.remove();
+        }
         const speechBubbleWidth = 150;
         const speechBubbleHeight = 160;
         this.speechBubble = document.createElement('div');
