@@ -1128,6 +1128,9 @@ function sleighUpdate(updateParams) {
 
 
 function reindeerStable() {
+    const audio = new Audio();
+    audio.src = audioPath + 'song2.m4a';
+    audio.play();
     addStableScene();
     const carrots = [];
     addCarrotTrough(carrots);
