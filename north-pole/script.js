@@ -4,6 +4,7 @@ const globals = {
     sceneWidth: 1408,
     sceneHeight: 704,
     imagesPath: 'assets/images/',
+    audioPath: 'assets/audio/',
     frameRate: 1000 / 60
 }
 
@@ -83,7 +84,7 @@ function isInHitbox(centerX, centerY, hitbox) {
         (centerY >= hitbox.y1 && centerY <= hitbox.y2));
 }
 
-function fadeTransition(sceneFunction) {
+function fadeTransition(sceneFunction, audioFile = undefined) {
     const fadeDuration = 3000;
     const blackDuration = 1000;
     const div = document.createElement('div');
@@ -106,6 +107,12 @@ function fadeTransition(sceneFunction) {
             }
         }
         sceneFunction();
+
+        if (audio) {
+            const audio = new Audio();
+            audio.src = audioPath + audioFile;
+            audio.play();
+        }
     }, fadeDuration);
 
     setTimeout(function() {
@@ -238,7 +245,7 @@ class Mistletoe {
     }
 
     teleport() {
-        fadeTransition(villageSceneOne);
+        fadeTransition(villageSceneOne, 'song1.m4a');
     }
 }
 
@@ -295,9 +302,9 @@ class Elf {
         this.div.style.top = (this.hitbox['y1'] / sceneHeight) * 100 + '%';
 
         if (isTouchDevice) {
-            this.div.addEventListener('touchstart', this.showDialogue.bind(this), { once: true });
+            this.div.addEventListener('touchstart', this.showDialogue.bind(this));
         } else {
-            this.div.addEventListener('click', this.showDialogue.bind(this), { once: true });
+            this.div.addEventListener('click', this.showDialogue.bind(this));
         }
         
 
@@ -353,7 +360,7 @@ class Elf {
     closeSpeechBubble() {
         this.speechBubble.removeChild(this.speechBubbleText);
         sceneContainerDiv.removeChild(this.speechBubble);
-        sceneContainerDiv.removeChild(this.div);
+        this.dialogueIndex = 0;
         this.callback();
     }
 }
@@ -374,7 +381,7 @@ function villageSceneOne() {
         'x2': 802,
         'y2': 664
     };
-    const elfDialogue = [`Welcome to the north pole, ${firstName}! I heard you are 
+    const elfDialogue = [`Welcome to the North Pole, ${firstName}! I heard you are 
 here to pick up a special present.`, `The last few gifts are being made in the toy factory. 
 You should be able to find yours there.`];
     new Elf(elfHitbox, elfDialogue, () => addScrollerRight(toyFactoryScene));
@@ -413,7 +420,7 @@ class GiftBox {
         this.type = 'gift-box-' + getRandomInt(1, Object.keys(giftBoxesData).length);
         this.data = giftBoxesData[this.type];
         this.conveyorBelt = conveyorBelt;
-        this.bottomY = 664;
+        this.bottomY = 668;
         
         this.img = document.createElement('img');
         this.img.setAttribute('draggable', false);
@@ -462,13 +469,13 @@ class ConveyorBelt {
         this.giftBoxes = [];
         this.giftBoxesData = {
             'gift-box-1': {
-                'width': 54,
+                'width': 64,
                 'imageWidth': 264,
                 'imageHeight': 292,
-                'yVariance': 12
+                'yVariance': 14
             },
             'gift-box-2': {
-                'width': 58,
+                'width': 66,
                 'imageWidth': 258,
                 'imageHeight': 298,
                 'yVariance': 10
@@ -602,7 +609,7 @@ function toyFactoryScene() {
 
 function villageSceneTwo() {
     addVillageScene();
-    addScrollerLeft(reindeerStable);
+    addScrollerLeft(reindeerStable, 'song2.m4a');
 }
 
 
@@ -1131,7 +1138,5 @@ function reindeerStable() {
 function main() {
     windowHandler();
     niceList();
-    //villageSceneOne();
-    //reindeerStable();
 }
 main();
